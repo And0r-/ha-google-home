@@ -25,7 +25,8 @@
     "step": {
       "init": {
         "data": {
-          "update_interval": "Change update interval. Increase this if you are suffering from devices timing out. Default: 180 (Seconds)"
+          "update_interval": "Change update interval. Increase this if you are suffering from devices timing out. Default: 180 (Seconds)",
+          "static_addresses": "Static Device Addresses (JSON format: {\"Device Name\": \"192.168.1.100\"})"
         }
       }
     }

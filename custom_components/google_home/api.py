@@ -70,6 +70,20 @@ class GlocaltokensApiClient:
         )
         self.google_devices: list[GoogleHomeDevice] = []
         self.zeroconf_instance = zeroconf_instance
+        self.static_addresses = None
+
+    async def set_static_addresses(self, static_addresses_str: str | None) -> None:
+        """Set static addresses from options."""
+        if static_addresses_str and static_addresses_str.strip():
+            try:
+                import json
+                self.static_addresses = json.loads(static_addresses_str.strip())
+                _LOGGER.info("Using static addresses: %s", self.static_addresses)
+            except json.JSONDecodeError as e:
+                _LOGGER.error("Invalid static addresses JSON format: %s", e)
+                self.static_addresses = None
+        else:
+            self.static_addresses = None
 
     async def async_get_master_token(self) -> str:
         """Get master API token."""
@@ -105,6 +119,7 @@ class GlocaltokensApiClient:
                 return self._client.get_google_devices(
                     zeroconf_instance=self.zeroconf_instance,
                     force_homegraph_reload=True,
+                    addresses=self.static_addresses,
                 )
 
             google_devices = await self.hass.async_add_executor_job(_get_google_devices)

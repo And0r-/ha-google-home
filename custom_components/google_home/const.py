@@ -53,6 +53,7 @@ CONF_ANDROID_ID: Final = "android_id"
 CONF_USERNAME: Final = "username"
 CONF_PASSWORD: Final = "password"
 CONF_MASTER_TOKEN: Final = "master_token"
+CONF_STATIC_ADDRESSES: Final = "static_addresses"
 
 # Defaults
 DEFAULT_NAME: Final = "Google Home"

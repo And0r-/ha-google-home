@@ -18,6 +18,7 @@ from .const import (
     CONF_ANDROID_ID,
     CONF_MASTER_TOKEN,
     CONF_PASSWORD,
+    CONF_STATIC_ADDRESSES,
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
     DATA_COORDINATOR,
@@ -174,6 +175,11 @@ class GoogleHomeOptionsFlowHandler(OptionsFlow):
             )
             _LOGGER.debug("Updating coordinator, update_interval: %s", update_interval)
             coordinator.update_interval = update_interval
+            
+            client = self.hass.data[DOMAIN][self.config_entry.entry_id]["client"]
+            static_addresses = self.options.get(CONF_STATIC_ADDRESSES, "")
+            await client.set_static_addresses(static_addresses)
+            
             return self.async_create_entry(
                 title=self.config_entry.data.get(CONF_USERNAME), data=self.options
             )
@@ -188,6 +194,11 @@ class GoogleHomeOptionsFlowHandler(OptionsFlow):
                             CONF_UPDATE_INTERVAL, UPDATE_INTERVAL
                         ),
                     ): int,
+                    vol.Optional(
+                        CONF_STATIC_ADDRESSES,
+                        default=self.config_entry.options.get(CONF_STATIC_ADDRESSES, ""),
+                        description={"suggested_value": '{"Living Room": "192.168.1.100"}'},
+                    ): str,
                 }
             ),
         )

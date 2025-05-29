@@ -18,6 +18,7 @@ from .api import GlocaltokensApiClient
 from .const import (
     CONF_ANDROID_ID,
     CONF_MASTER_TOKEN,
+    CONF_STATIC_ADDRESSES,
     CONF_UPDATE_INTERVAL,
     DATA_CLIENT,
     DATA_COORDINATOR,
@@ -41,12 +42,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: GoogleHomeConfigEntry) -
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
-    username = cast("str", entry.data.get(CONF_USERNAME))
-    password = cast("str", entry.data.get(CONF_PASSWORD))
-    android_id = cast("str", entry.data.get(CONF_ANDROID_ID))
-    master_token = cast("str", entry.data.get(CONF_MASTER_TOKEN))
+    username = cast(str, entry.data.get(CONF_USERNAME))
+    password = cast(str, entry.data.get(CONF_PASSWORD))
+    android_id = cast(str, entry.data.get(CONF_ANDROID_ID))
+    master_token = cast(str, entry.data.get(CONF_MASTER_TOKEN))
     update_interval = cast(
-        "int", entry.options.get(CONF_UPDATE_INTERVAL, UPDATE_INTERVAL)
+        int, entry.options.get(CONF_UPDATE_INTERVAL, UPDATE_INTERVAL)
     )
 
     _LOGGER.debug(
@@ -65,6 +66,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: GoogleHomeConfigEntry) -
         android_id=android_id,
         zeroconf_instance=zeroconf_instance,
     )
+
+    static_addresses = cast(str, entry.options.get(CONF_STATIC_ADDRESSES, ""))
+    if static_addresses:
+        await glocaltokens_client.set_static_addresses(static_addresses)
+        _LOGGER.debug("Static addresses configured from options")
 
     coordinator = DataUpdateCoordinator(
         hass,
@@ -107,3 +113,7 @@ async def async_update_entry(hass: HomeAssistant, entry: GoogleHomeConfigEntry) 
     _LOGGER.debug(
         "Coordinator update interval is: %s", timedelta(seconds=update_interval)
     )
+    
+    client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
+    static_addresses = cast(str, entry.options.get(CONF_STATIC_ADDRESSES, ""))
+    client.set_static_addresses(static_addresses)
