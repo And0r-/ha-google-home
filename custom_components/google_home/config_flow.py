@@ -197,7 +197,6 @@ class GoogleHomeOptionsFlowHandler(OptionsFlow):
                     vol.Optional(
                         CONF_STATIC_ADDRESSES,
                         default=self.config_entry.options.get(CONF_STATIC_ADDRESSES, ""),
-                        description={"suggested_value": '{"Living Room": "192.168.1.100"}'},
                     ): str,
                 }
             ),
