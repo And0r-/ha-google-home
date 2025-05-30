@@ -24,7 +24,8 @@
     "step": {
       "init": {
         "data": {
-          "update_interval": "Aktualisierungsintervall ändern. Erhöhen Sie diesen Wert, wenn Sie unter Zeitüberschreitungen der Geräte leiden. Standard: 180 (Sekunden)"
+          "update_interval": "Aktualisierungsintervall ändern. Erhöhen Sie diesen Wert, wenn Sie unter Zeitüberschreitungen der Geräte leiden. Standard: 180 (Sekunden)",
+          "static_addresses": "Statische Geräte-Adressen (JSON-Format: {\"Gerätename\": \"192.168.1.100\"})"
         }
       }
     }
