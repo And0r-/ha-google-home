@@ -116,4 +116,4 @@ async def async_update_entry(hass: HomeAssistant, entry: GoogleHomeConfigEntry) 
     
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     static_addresses = cast(str, entry.options.get(CONF_STATIC_ADDRESSES, ""))
-    client.set_static_addresses(static_addresses)
+    await client.set_static_addresses(static_addresses)
